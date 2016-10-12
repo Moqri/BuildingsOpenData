@@ -1,0 +1,25 @@
+<html>
+<body>
+<p id="demo"></p>
+</body>
+
+<script   src="http://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
+
+<script>
+$.ajaxSetup({ cache: true });
+
+function logResults(json){
+  console.log(json);
+}
+
+$.getJSON("http://54.242.243.238:8080/api/action/datastore_search?resource_id=c0d0b53e-65f8-4391-a138-c9f109abc90b&q=julia%20smith&callback=?",
+function(json){
+  console.log(json);
+  var data = JSON.stringify(json)
+  document.getElementById("demo").innerHTML = data;
+  var obj = $.parseJSON(data);
+  alert(obj['result']['records'][1]['PHY_ADDR1']);
+});
+</script>
+
+</html>
