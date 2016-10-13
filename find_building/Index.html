@@ -8,10 +8,6 @@
 <script>
 $.ajaxSetup({ cache: true });
 
-function logResults(json){
-  console.log(json);
-}
-
 $.getJSON("http://54.242.243.238:8080/api/action/datastore_search?resource_id=c0d0b53e-65f8-4391-a138-c9f109abc90b&q=julia%20smith&callback=?",
 function(json){
   console.log(json);
