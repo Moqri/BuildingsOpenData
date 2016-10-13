@@ -1,6 +1,7 @@
 <html>
 <body>
 <p id="demo"></p>
+<table id="t1" border="1"></table>
 </body>
 
 <script   src="http://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
@@ -8,13 +9,41 @@
 <script>
 $.ajaxSetup({ cache: true });
 
-$.getJSON("http://54.242.243.238:8080/api/action/datastore_search?resource_id=c0d0b53e-65f8-4391-a138-c9f109abc90b&q=julia%20smith&callback=?",
+
+
+$.getJSON("http://54.242.243.238:8080/api/action/datastore_search?resource_id=c0d0b53e-65f8-4391-a138-c9f109abc90b&q=mehr&callback=?",
 function(json){
   console.log(json);
   var data = JSON.stringify(json)
-  document.getElementById("demo").innerHTML = data;
   var obj = $.parseJSON(data);
-  alert(obj['result']['records'][1]['PHY_ADDR1']);
+  //alert(obj['result']['records'][1]['PHY_ADDR1']);
+    var tbl_body = "";
+    var odd_even = false;
+
+    //header - not the best way to write it
+    $.each(obj['result']['records'], function() {
+        var header = "";
+        $.each(this, function(k , v) {
+            header += "<td>"+k+"</td>";
+        })
+        tbl_body += "<tr>"+header+"</tr>";
+    })
+
+    $("#t1").html(tbl_body);
+
+    $.each(obj['result']['records'], function() {
+        var tbl_row = "";
+        $.each(this, function(k , v) {
+        	if (v){
+            	tbl_row += "<td>"+v+"</td>";
+        	}else{
+            	tbl_row += "<td>"+"</td>";        		
+        	}
+        })
+        tbl_body += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
+        odd_even = !odd_even;               
+    })
+    $("#t1").html(tbl_body);
 });
 </script>
 
