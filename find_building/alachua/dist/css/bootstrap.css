@@ -250,10 +250,12 @@ th {
   }
   .table {
     border-collapse: collapse !important;
+    text-align:center;
   }
   .table td,
   .table th {
     background-color: #fff !important;
+    text-align: center;   
   }
   .table-bordered th,
   .table-bordered td {
