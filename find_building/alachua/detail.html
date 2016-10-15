@@ -51,7 +51,7 @@
       <h3 >Alachua County Building Detail</h3>
 
       <div class="jumbotron">
-        <table class="table" style="text-align:left" id="t1"></table>
+        <p class="p" id="p1"></p>
       </div>
 
       <footer class="footer">
@@ -88,41 +88,36 @@
       console.log(json);
       var data = JSON.stringify(json)
       var obj = $.parseJSON(data);
-      //alert(obj['result']['records'][1]['PHY_ADDR1']);
-        var tbl_body = "";
-        var odd_even = false;
-        //header - not the best way to write it
-        var tbl_head ="";
-        tbl_head += "<th > Parcel ID </th>";
-        tbl_head += "<th > Parcel Address </th>";
-        tbl_head += "<th > Parcel Owner </th>";
-        tbl_head += "<th > Detail </th>";
-        tbl_body += "<tr>"+tbl_head+"</tr>";
-
-        $.each(obj['result']['records'], function(index, value) {
-            var tbl_row = "";
-            var parcel_id=value['PARCEL_ID'];
-            var physical_address=value['PHY_ADDR1'];
-            var physical_address2=value['PHY_ADDR2'];
-
-            var owner_name=value['OWN_NAME'];    
-            var owner_address=value['OWN_ADDR1'];    
-            var owner_city=value['OWN_CITY'];
-            var owner_state=value['OWN_STATE'];    
-            var owner_zip=value['OWN_ZIPCD']||'';    
+      var value=obj['result']['records'][0];
+      var parcel_id=value['PARCEL_ID'];
+      var physical_address=value['PHY_ADDR1'];
+      var physical_address2=value['PHY_ADDR2'];
+      var owner_name=value['OWN_NAME'];    
+      var owner_address=value['OWN_ADDR1'];    
+      var owner_city=value['OWN_CITY'];
+      var owner_state=value['OWN_STATE'];    
+      var owner_zip=value['OWN_ZIPCD']||'';   
+      var year_built=value['ACT_YR_BLT']||'';   
+      var just_value=value['JV']||'';   
+      var land_square=value['LND_SQFOOT']||'';   
+      var land_value=value['LND_VAL']||'';   
 
 
-            tbl_row += "<td><a href=\"index.html?parcel_id="+parcel_id+"\"</a>"+parcel_id+"</td>";
-            tbl_row +="<td><a href=\"index.html?physical_address="+physical_address+"\"</a>"+physical_address+' '+physical_address2+"</td>";
-            tbl_row +="<td><a href=\"index.html?owner_name="+owner_name+"\"</a>"+owner_name+' ('+owner_address+', '+owner_city+', '+ owner_state+' '+owner_zip+")</td>";
-            tbl_row += "<td>\
-              <a href=\"detail.html?parcel_id="+parcel_id+"\"> \
-                <img src=\"detail.ico\" width=\"30\" height=\"30\">\
-              </a>\
-              </td>";
-            tbl_body += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
-        })
-        $("#t1").html(tbl_body);
+      console.log(owner_zip)
+      $("#p1").html(parcel_id+"<br>"
+        +physical_address+"<br>"
+        +physical_address2+"<br>"
+        +owner_name+"<br>"
+        +owner_address+"<br>"
+        +owner_city+"<br>"
+        +owner_state+"<br>"
+        +owner_zip+"<br><br><b>Year Buit:  "
+        +year_built+"<br>Assesed Value:  "
+        +just_value+"<br>Land Square:  "
+        +land_square+"<br>Land Value:  "
+        +land_value+"<br><br>and much more to be added soon!"
+
+        );
     });
 
 
