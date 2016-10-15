@@ -52,7 +52,16 @@
 
       <div class="jumbotron">
         <p class="p" id="p1"></p>
+
+        <!--map-->
+        <p> this map is not connected to the address yet</p>
+        <div style="height: 500px; width:1000px"; border=1px solid black> 
+          <div id="map" style="float: left; height: 100%;width: 45%"></div>
+          <div id="pano" style="float: left; height: 100%;width: 45%"></div>
+        </div>   
+
       </div>
+   
 
       <footer class="footer">
         <p>&copy; 2016 BuildingsOpenData.org, Inc.</p>
@@ -120,10 +129,42 @@
         );
     });
 
+    //google map
+    function initialize() {
+      var geocoder = new google.maps.Geocoder();
+      var address = "1515 SE 15TH AVE, GAINESVILLE, FL 32641";
+      var latitude =0;
+      var longitude =0;
+      var fenway;
+      geocoder.geocode( { 'address': address}, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            latitude = results[0].geometry.location.lat();
+            longitude = results[0].geometry.location.lng();
+            console.log(latitude+longitude);
+            fenway = {lat: latitude, lng: longitude};
+              var map = new google.maps.Map(document.getElementById('map'), {
+                center: fenway,
+                zoom: 14
+              });
 
+              var panorama = new google.maps.StreetViewPanorama(
+                  document.getElementById('pano'), {
+                    position: fenway,
+                    pov: {
+                      heading: 34,
+                      pitch: 10
+                    }
+                  });
+              map.setStreetView(panorama);
 
+            } 
+      }); 
+    }
     </script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?callback=initialize">
+    </script>    
   </body>
 </html>
