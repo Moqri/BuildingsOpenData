@@ -87,9 +87,9 @@
     var parcel_id = parse('parcel_id')
     console.log(parcel_id)
     $.ajaxSetup({ cache: true });
-    var url = ""
+    var url = "https://datahub.io/api/action/datastore_search?resource_id="
     if (parcel_id){
-    url="http://buildingsopendata.org/api/action/datastore_search?resource_id=78c1ef71-9bb6-4e8a-afde-c74514d47f64&q={\"PARCEL_ID\":\""+parcel_id+"\"}&callback=?"
+    url+="=78c1ef71-9bb6-4e8a-afde-c74514d47f64&q={\"PARCEL_ID\":\""+parcel_id+"\"}&callback=?"
     }
     console.log(url)
     $.getJSON(url,
