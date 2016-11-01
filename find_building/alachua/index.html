@@ -113,18 +113,19 @@
     console.log(q)
 
     $.ajaxSetup({ cache: true });
-    var url = ""
+    var url = "https://datahub.io/api/action/datastore_search?resource_id="
+	var resource_id="2c5bbdd0-9b53-4291-aa6a-b3f17a835240"
     if (q) {
-        url="http://buildingsopendata.org/api/action/datastore_search?resource_id=78c1ef71-9bb6-4e8a-afde-c74514d47f64&q="+q+"&callback=?"
+        url+=resource_id+"&q="+q+"&callback=?"
     }else{
         if (parcel_id){
-        url="http://buildingsopendata.org/api/action/datastore_search?resource_id=78c1ef71-9bb6-4e8a-afde-c74514d47f64&q={\"PARCEL_ID\":\""+parcel_id+"\"}&callback=?"
+        url+=resource_id+"&q={\"PARCEL_ID\":\""+parcel_id+"\"}&callback=?"
         }
         if (physical_address){
-        url="http://buildingsopendata.org/api/action/datastore_search?resource_id=78c1ef71-9bb6-4e8a-afde-c74514d47f64&q={\"PHY_ADDR1\":\""+physical_address+"\"}&callback=?"  
+        url+=resource_id+"&q={\"PHY_ADDR1\":\""+physical_address+"\"}&callback=?"  
         }    
         if (owner_name){
-        url="http://buildingsopendata.org/api/action/datastore_search?resource_id=78c1ef71-9bb6-4e8a-afde-c74514d47f64&q={\"OWN_NAME\":\""+owner_name+"\"}&callback=?"  
+        url+=resource_id+"&q={\"OWN_NAME\":\""+owner_name+"\"}&callback=?"  
         }
     console.log(url)
     }
