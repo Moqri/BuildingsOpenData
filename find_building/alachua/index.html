@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="">
 
-    <title>Alachua County Parcel Search</title>
+    <title>Call Access Open Data</title>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
@@ -37,7 +37,7 @@
       <!-- The justified navigation menu is meant for single line per list item.
            Multiple lines will require custom code not provided by Bootstrap. -->
       <div class="masthead">
-        <h3 class="text-muted">Buildings Open Data</h3>
+        <h3 class="text-muted">Cal Access Lobbying Open Data</h3>
         <nav>
           <ul class="nav nav-justified">
             <li class="active"><a href="#">Search</a></li>
@@ -48,17 +48,17 @@
         </nav>
       </div>
       <br>
-      <h3 >Alachua County Buildings Search</h3>
+      <h3 >Lobbyin Search</h3>
 
       <!-- Jumbotron -->
       <div class="jumbotron">
-        <h1>Find Your House!</h1>
+        <h1>Find Lobbying Reports</h1>
         <div class="lead">
           <form action="index.html">
             <br>
             <input class="form-control input-lg" name="q" placeholder="Search for address, owner name, or parcel ID">
             <h3></h3>
-            <input class="btn btn-lg btn-success" type="submit" value="Find My House">
+            <input class="btn btn-lg btn-success" type="submit" value="Find Reports">
           </form>        
         </div>
         <br></br>
@@ -92,6 +92,13 @@
     </div> <!-- /container -->
 
     <script>
+    function formatDollar(num) {
+    var p = num.toFixed(2).split(".");
+    return "$" + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
+        return  num=="-" ? acc : num + (i && !(i % 3) ? "," : "") + acc;
+    }, "") + "." + p[1];
+    }
+
     function parse(val) {
         var result ,
             tmp = [];
@@ -114,9 +121,10 @@
 
     $.ajaxSetup({ cache: true });
     var url = "https://datahub.io/api/action/datastore_search?resource_id="
-	var resource_id="2c5bbdd0-9b53-4291-aa6a-b3f17a835240"
+	var resource_id="117b2e40-5361-49ac-819f-01e12a371632"
     if (q) {
-        url+=resource_id+"&q="+q+"&callback=?"
+        //url+=resource_id+"&sort=FILING_ID desc&q="+q+"&callback=?"
+        url+=resource_id+"&sort=report_date desc,FILING_ID&limit=200&callback=?"
     }else{
         if (parcel_id){
         url+=resource_id+"&q={\"PARCEL_ID\":\""+parcel_id+"\"}&callback=?"
@@ -139,30 +147,32 @@
         var odd_even = false;
         //header - not the best way to write it
         var tbl_head ="";
-        tbl_head += "<th > Parcel ID </th>";
-        tbl_head += "<th > Parcel Address </th>";
-        tbl_head += "<th > Parcel Owner </th>";
-        tbl_head += "<th > Detail </th>";
+        tbl_head += "<th > Filing ID </th>";
+        tbl_head += "<th > Report Date </th>";
+        tbl_head += "<th > Filer </th>";
+        tbl_head += "<th > Filing Amount </th>";
+        tbl_head += "<th > Report </th>";
         tbl_body += "<tr>"+tbl_head+"</tr>";
 
         $.each(obj['result']['records'], function(index, value) {
             var tbl_row = "";
-            var parcel_id=value['PARCEL_ID'];
-            var physical_address=value['PHY_ADDR1'];
-            var physical_address2=value['PHY_ADDR2'];
+            var filing_id=value['FILING_ID'];
+            var report_date=value['report_date'].slice(0,10);
+            var filer_name=value['FILER_NAML'];
+            if (value['FEES_AMT'])
+              var amount=formatDollar(parseFloat(value['FEES_AMT']))//.slice(0, -2);
+            else
+              var amount=""
+  
 
-            var owner_name=value['OWN_NAME'];    
-            var owner_address=value['OWN_ADDR1'];    
-            var owner_city=value['OWN_CITY'];
-            var owner_state=value['OWN_STATE'];    
-            var owner_zip=value['OWN_ZIPCD']||'';    
 
-
-            tbl_row += "<td><a href=\"index.html?parcel_id="+parcel_id+"\"</a>"+parcel_id+"</td>";
-            tbl_row +="<td><a href=\"index.html?physical_address="+physical_address+"\"</a>"+physical_address+' '+physical_address2+"</td>";
-            tbl_row +="<td><a href=\"index.html?owner_name="+owner_name+"\"</a>"+owner_name+' ('+owner_address+', '+owner_city+', '+ owner_state+' '+owner_zip+")</td>";
+            tbl_row += "<td><a href=\"index.html?filing_id="+filing_id+"\"</a>"+filing_id+"</td>";
+            tbl_row +="<td><a href=\"index.html?date="+report_date+"\"</a>"+report_date+"</td>";
+            tbl_row +="<td><a href=\"index.html?filer_name="+filer_name+"\"</a>"+filer_name+"</td>";
+            tbl_row +="<td>"+amount+"</td>";
             tbl_row += "<td>\
-              <a href=\"detail.html?parcel_id="+parcel_id+"\"> \
+              <a href=\"http://cal-access.ss.ca.gov/PDFGen/pdfgen.prg?filingid="
+              +filing_id+"\" target=\"_blank\" > \
                 <img src=\"detail.ico\" width=\"30\" height=\"30\">\
               </a>\
               </td>";
